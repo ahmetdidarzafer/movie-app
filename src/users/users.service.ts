@@ -79,10 +79,10 @@ export class UsersService {
 
   }
 
-  async updatePassword(id: number, updateUserDto: UpdateUserDto) {
+  async updatePassword(username: string, updateUserDto: UpdateUserDto) {
 
     try {
-      const userToUpdate = await this.userRepository.findOne({ where: { id:id  } });
+      const userToUpdate = await this.userRepository.findOne({ where: { username: username } });
       if (userToUpdate == null || userToUpdate == undefined) {
         throw new HttpException("There is no user to update", 404);
       }
@@ -105,8 +105,8 @@ export class UsersService {
 
   }
 
-  async remove(id: number) {
-    await this.userRepository.delete(id);
+  async remove(username: string) {
+    await this.userRepository.delete(username);
   }
   
 }

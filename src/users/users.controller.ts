@@ -16,7 +16,7 @@ export class UsersController {
     return this.userService.getAll();
   }
 
-  @Get('findUser/:id')
+  @Get('findUser/:username')
   findOneByUsername(@Param('username') username: string) {
     return this.userService.findOneByUsername(username);
   }
@@ -31,15 +31,15 @@ export class UsersController {
     return this.userService.create(createUserDto);
   }
   
-  @Patch('updateUser/:id')
+  @Patch('updateUser/:username')
   @UsePipes(new ValidationPipe())
-  update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.updatePassword(id, updateUserDto);
+  update(@Param('username') username: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.userService.updatePassword(username, updateUserDto);
   }
 
-  @Delete('deleteUser/:id')
-  remove(@Param('id') id: number) {
-    return this.userService.remove(id);
+  @Delete('deleteUser/:username')
+  remove(@Param('username') username: string) {
+    return this.userService.remove(username);
   }
 }
  

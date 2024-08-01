@@ -1,0 +1,41 @@
+version: '3.8'
+services:
+  app:
+    build:
+     context: .
+     dockerfile: Dockerfile
+    ports: 
+      - 3000:3000
+    command: npm run start:dev
+    depends_on:
+      - db
+    networks:
+      - movie_network
+  admin:
+    image: adminer
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - 8080:8080
+    networks:
+      - movie_network     
+  db:
+    image: postgres:13
+    container_name: movie_db
+    environment:
+      POSTGRES_USER: azafer
+      POSTGRES_PASSWORD: ahmet123
+      POSTGRES_DB: movie_db
+    networks:
+     - movie_network
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+networks: 
+  movie_network:
+   driver: bridge

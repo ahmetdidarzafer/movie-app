@@ -4,6 +4,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { LoginDTO } from "./dto/login.dto";
+import { DeleteUserDto } from "./dto/delete-user.dto";
 
 @Controller('user')
 @ApiBearerAuth()
@@ -38,8 +39,8 @@ export class UsersController {
   }
 
   @Delete('deleteUser/:username')
-  remove(@Param('username') username: string) {
-    return this.userService.remove(username);
+  remove(@Param('username') username: string, @Body() deleteUserDto: DeleteUserDto) {
+    return this.userService.remove(username, deleteUserDto);
   }
 }
  

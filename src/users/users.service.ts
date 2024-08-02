@@ -8,6 +8,8 @@ import * as bcrypt from 'bcrypt'
 import { LoginDTO } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { DeleteUserDto } from './dto/delete-user.dto';
+import { throwError } from 'rxjs';
 @Injectable()
 export class UsersService {
   constructor(
@@ -22,23 +24,29 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto) {
     try {
-      const createdUser = await this.userRepository.findOne({where:{username : createUserDto.username}})
-      
+      const createdUser = await this.userRepository.findOne({where:{username : createUserDto.username}});
+      const createdUserByMail = await this.userRepository.findOne({where:{email:createUserDto.email}});
+
       //BU KISIM ŞİFRE HASHLEMEK İÇİN KULLANLIR
       const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
       //BU KISIM ŞİFRE HASHLEMEK İÇİN KULLANLIR
       createUserDto.password = hashedPassword;
 
-      if(createUserDto.username == createdUser.username){
-        throw new HttpException("This username already in use", 400);
+      if(createdUserByMail == null || createdUserByMail == undefined){
+        if(createdUser == null || createdUser == undefined){
+        
+          const savedUser = await this.userRepository.save(createUserDto);
+  
+          if (savedUser == null || savedUser == undefined) {
+            throw new HttpException("Could not create user", 400)
+          }
+          return { message: "User created", user: savedUser }
+        }
       }
+      //if(createUserDto.username == createdUser.username){
+      throw new HttpException("Username or mail already in use", 400);
+      //}
 
-      const savedUser = await this.userRepository.save(createUserDto);
-
-      if (savedUser == null || savedUser == undefined) {
-        throw new HttpException("Could not create user", 400)
-      }
-      return { message: "User created", user: savedUser }
     } catch (error) {
       throw error
     }
@@ -97,7 +105,7 @@ export class UsersService {
       this.userRepository.merge(userToUpdate, updateUserDto);
       await this.userRepository.save(userToUpdate);
 
-      return userToUpdate;
+      return {message: "User password changed", user: userToUpdate};
     }
     catch (error) {
       throw error;
@@ -105,8 +113,23 @@ export class UsersService {
 
   }
 
-  async remove(username: string) {
-    await this.userRepository.delete(username);
+  async remove(username: string, deleteUserDto: DeleteUserDto) {
+    try{
+      const userToDelete = await this.userRepository.findOne({ where: { username: username } });
+      if (userToDelete == null || userToDelete == undefined) {
+        throw new HttpException("There is no user to delete", 404);
+      }
+      const result = await bcrypt.compare(deleteUserDto.password, userToDelete.password);
+
+      if (result == false){
+        throw new HttpException('Password does not match', 401);
+      }
+      await this.userRepository.delete(userToDelete.id);
+      return {message: 'User deleted', user: userToDelete};
+    }
+    catch(error){
+      throw error;
+    }
   }
   
 }

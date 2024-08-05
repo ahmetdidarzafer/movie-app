@@ -9,7 +9,6 @@ import { LoginDTO } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { DeleteUserDto } from './dto/delete-user.dto';
-import { throwError } from 'rxjs';
 @Injectable()
 export class UsersService {
   constructor(

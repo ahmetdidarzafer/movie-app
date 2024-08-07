@@ -39,7 +39,7 @@ export class UsersService {
           if (savedUser == null || savedUser == undefined) {
             throw new HttpException("Could not create user", 400)
           }
-          return { message: "User created", user: savedUser }
+          return { message: "Kullanıcı Oluşturuldu", user: savedUser}
         }
       }
       //if(createUserDto.username == createdUser.username){
@@ -65,7 +65,7 @@ export class UsersService {
         throw new HttpException('Login Failed', 401)
       }
       const token = this.jwtService.sign({id:user.id},{expiresIn:'15d',privateKey:this.configService.get<string>('JWT_SECRET')})
-      return {message: "Login Successful", token:token};
+      return {message: "Login Successful", token:token, user: user};
 
    
     } catch (error) {

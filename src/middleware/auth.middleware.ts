@@ -1,16 +1,18 @@
 import { NestMiddleware, Inject, HttpException } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 
 export class AuthMiddleware implements NestMiddleware {
-    constructor(@Inject(JwtService) private readonly jwtService: JwtService) {
-
-    }
+    constructor(
+        @Inject(JwtService) private readonly jwtService: JwtService,
+        private configService: ConfigService,
+    ){}
     use(req: any, res: any, next: (error?: Error | any) => void) {
         try {
             const token = req.headers.authorization;
             console.log(token)
             const tokenWithoutBearer = token.split(' ')[1];
-            const decoded = this.jwtService.verify(tokenWithoutBearer, { publicKey: "adkjfbndabsnfknjadhfjvmnöamdhjmngöhkdahjfbmdajhlhön" })
+            const decoded = this.jwtService.verify(tokenWithoutBearer, { publicKey: this.configService.get<string>('JWT_SECRET') })
             
             if (decoded) {
                 const id = decoded.id;

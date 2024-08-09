@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { TmdbService } from './tmdb.service';
 import { ApiTags, ApiOperation, ApiParam, ApiQuery } from '@nestjs/swagger';
-import { PopularMoviesDto, MovieDto } from './dto/popular-movies.dto';
+import { PopularMoviesDto, MovieDto, TopRatedMoviesDto } from './dto/popular-movies.dto';
 
 @ApiTags('TMDB')
 @Controller('movies')
@@ -26,5 +26,10 @@ export class TmdbController {
   @ApiOperation({ summary: 'Get popular movies' })
   getPopularMovies(): Promise<PopularMoviesDto> {
     return this.tmdbService.getPopularMovies();
+  }
+  @Get('topRated')
+  @ApiOperation({ summary: 'Get top rated movies' })
+  getTopRatedMovies(): Promise<TopRatedMoviesDto> {
+    return this.tmdbService.getTopRatedMovies();
   }
 }

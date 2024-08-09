@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { map } from 'rxjs/operators';
-import { PopularMoviesDto } from './dto/popular-movies.dto';
+import { PopularMoviesDto, TopRatedMoviesDto } from './dto/popular-movies.dto';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
@@ -23,6 +23,10 @@ export class TmdbService {
 
   getPopularMovies(): Promise<PopularMoviesDto> {
     const url = `${this.baseUrl}/movie/popular?api_key=${this.apiKey}`;
+    return this.httpService.get(url).pipe(map(response => response.data)).toPromise();
+  }
+  getTopRatedMovies(): Promise<TopRatedMoviesDto> {
+    const url = `${this.baseUrl}/movie/top_rated?api_key=${this.apiKey}`;
     return this.httpService.get(url).pipe(map(response => response.data)).toPromise();
   }
 }

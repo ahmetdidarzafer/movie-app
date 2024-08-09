@@ -31,5 +31,21 @@ export class PopularMoviesDto {
   })
   results: MovieDto[];
 }
+export class TopRatedMoviesDto {
+  @ApiProperty({ description: 'The page number' })
+  page: number;
+
+  @ApiProperty({ description: 'Total number of pages' })
+  total_pages: number;
+
+  @ApiProperty({ description: 'Total number of results' })
+  total_results: number;
+
+  @ApiProperty({
+    description: 'List of popular movies',
+    type: [MovieDto],
+  })
+  results: MovieDto[];
+}
 
 

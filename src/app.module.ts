@@ -53,6 +53,7 @@ import { AuthMiddleware } from './middleware/auth.middleware';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TmdbModule } from './tmdb/tmdb.module';
+import { Movie } from './tmdb/entities/movie.entity';
 
 @Module({
   imports: [
@@ -69,7 +70,7 @@ import { TmdbModule } from './tmdb/tmdb.module';
         username: configService.get<string>('DATABASE_USER'),
         password: configService.get<string>('DATABASE_PASSWORD'),
         database: configService.get<string>('DATABASE_NAME'),
-        entities: [User],
+        entities: [User,Movie],
         synchronize: true,
         logging: true
       }),

@@ -42,14 +42,10 @@ export class UsersService {
           return { message: "Kullanıcı Oluşturuldu", user: savedUser}
         }
       }
-      //if(createUserDto.username == createdUser.username){
       throw new HttpException("Username or mail already in use", 400);
-      //}
-
     } catch (error) {
       throw error
     }
-
   }
 
   async login(loginDto: LoginDTO) {
@@ -58,7 +54,6 @@ export class UsersService {
       if (user == undefined || user == null) {
         throw new HttpException("User not found", 404)
       }
-
       const result = await bcrypt.compare(loginDto.password, user.password);
       console.log(result);
       if (result == false){
@@ -66,8 +61,6 @@ export class UsersService {
       }
       const token = this.jwtService.sign({id:user.id},{expiresIn:'15d',privateKey:this.configService.get<string>('JWT_SECRET')})
       return {message: "Login Successful", token:token, user: user};
-
-   
     } catch (error) {
       throw error
     }

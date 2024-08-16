@@ -1,12 +1,17 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, Request } from '@nestjs/common';
 import { TmdbService } from './tmdb.service';
-import { ApiTags, ApiOperation, ApiParam, ApiQuery } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiParam, ApiQuery, ApiBearerAuth } from '@nestjs/swagger';
 import { PopularMoviesDto, MovieDto, TopRatedMoviesDto } from './dto/popular-movies.dto';
+import { Movie } from './entities/movie.entity';
 
+interface favoriteMovieDto {
+  movieId: number
+}
 @ApiTags('TMDB')
 @Controller('movies')
+@ApiBearerAuth()
 export class TmdbController {
-  constructor(private readonly tmdbService: TmdbService) {}
+  constructor(private readonly tmdbService: TmdbService) { }
 
   @Get('movie/:id')
   @ApiOperation({ summary: 'Get movie details by ID' })
@@ -29,7 +34,14 @@ export class TmdbController {
   }
   @Get('topRated')
   @ApiOperation({ summary: 'Get top rated movies' })
-  getTopRatedMovies(): Promise<TopRatedMoviesDto> {
+  getTopRatedMovies(): Promise<Movie[]> {
     return this.tmdbService.getTopRatedMovies();
+  }
+  @Post('addFavorite')
+  @ApiOperation({ summary: 'Add movie to user favorites' })
+  addFavorite(@Body() dto: favoriteMovieDto, @Request() req) {
+    console.log(dto)
+    const userId = req.body.id; // Kullanıcının ID'sini almak
+    return this.tmdbService.addToFavorites(userId, dto.movieId);
   }
 }

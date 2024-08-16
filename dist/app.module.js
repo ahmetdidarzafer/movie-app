@@ -11,10 +11,11 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const user_entity_1 = require("./users/entities/user.entity");
 const users_module_1 = require("./users/users.module");
-const movies_module_1 = require("./movies/movies.module");
-const movie_entity_1 = require("./movies/entities/movie.entity");
 const auth_middleware_1 = require("./middleware/auth.middleware");
 const jwt_1 = require("@nestjs/jwt");
+const config_1 = require("@nestjs/config");
+const tmdb_module_1 = require("./tmdb/tmdb.module");
+const movie_entity_1 = require("./tmdb/entities/movie.entity");
 let AppModule = class AppModule {
     configure(consumer) {
         consumer.apply(auth_middleware_1.AuthMiddleware).forRoutes('movies');
@@ -25,20 +26,27 @@ exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
             jwt_1.JwtModule,
-            typeorm_1.TypeOrmModule.forRoot({
-                type: 'postgres',
-                host: 'db',
-                port: 5432,
-                username: 'azafer',
-                password: 'ahmet123',
-                database: 'movie_db',
-                entities: [user_entity_1.User, movie_entity_1.Movie],
-                synchronize: true,
-                logging: true
+            config_1.ConfigModule.forRoot({
+                isGlobal: true
+            }),
+            typeorm_1.TypeOrmModule.forRootAsync({
+                imports: [config_1.ConfigModule],
+                useFactory: (configService) => ({
+                    type: 'postgres',
+                    host: configService.get('DATABASE_HOST'),
+                    port: configService.get('DATABASE_PORT'),
+                    username: configService.get('DATABASE_USER'),
+                    password: configService.get('DATABASE_PASSWORD'),
+                    database: configService.get('DATABASE_NAME'),
+                    entities: [user_entity_1.User, movie_entity_1.Movie],
+                    synchronize: true,
+                    logging: true
+                }),
+                inject: [config_1.ConfigService],
             }),
             users_module_1.UsersModule,
-            movies_module_1.MoviesModule
-        ]
+            tmdb_module_1.TmdbModule,
+        ],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

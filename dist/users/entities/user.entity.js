@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const typeorm_1 = require("typeorm");
+const movie_entity_1 = require("../../tmdb/entities/movie.entity");
 let User = class User {
 };
 exports.User = User;
@@ -30,6 +31,11 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
+__decorate([
+    (0, typeorm_1.ManyToMany)(() => movie_entity_1.Movie, movie => movie.users),
+    (0, typeorm_1.JoinTable)({ name: "users-favorites", joinColumn: { name: "user" }, inverseJoinColumn: { name: "movie" } }),
+    __metadata("design:type", Array)
+], User.prototype, "favoritedMovies", void 0);
 exports.User = User = __decorate([
     (0, typeorm_1.Entity)()
 ], User);

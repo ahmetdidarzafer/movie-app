@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Movie } from '../entities/movie.entity';
 
 export class MovieDto {
     @ApiProperty({ description: 'The movie ID' })
@@ -43,9 +44,9 @@ export class TopRatedMoviesDto {
 
   @ApiProperty({
     description: 'List of popular movies',
-    type: [MovieDto],
+    type: [Movie],
   })
-  results: MovieDto[];
+  results: Movie[];
 }
 
 

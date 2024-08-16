@@ -4,10 +4,13 @@ import { User } from "./entities/user.entity";
 import { Repository } from "typeorm";
 import { LoginDTO } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { DeleteUserDto } from './dto/delete-user.dto';
 export declare class UsersService {
     private userRepository;
     private readonly jwtService;
-    constructor(userRepository: Repository<User>, jwtService: JwtService);
+    private configService;
+    constructor(userRepository: Repository<User>, jwtService: JwtService, configService: ConfigService);
     getAll(): Promise<User[]>;
     create(createUserDto: CreateUserDto): Promise<{
         message: string;
@@ -16,8 +19,15 @@ export declare class UsersService {
     login(loginDto: LoginDTO): Promise<{
         message: string;
         token: string;
+        user: User;
     }>;
-    findOne(id: number): Promise<User>;
-    update(id: number, updateUserDto: UpdateUserDto): Promise<User>;
-    remove(id: number): Promise<void>;
+    findOneByUsername(username: string): Promise<User>;
+    updatePassword(username: string, updateUserDto: UpdateUserDto): Promise<{
+        message: string;
+        user: User;
+    }>;
+    remove(username: string, deleteUserDto: DeleteUserDto): Promise<{
+        message: string;
+        user: User;
+    }>;
 }

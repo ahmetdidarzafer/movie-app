@@ -14,17 +14,19 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthMiddleware = void 0;
 const common_1 = require("@nestjs/common");
+const config_1 = require("@nestjs/config");
 const jwt_1 = require("@nestjs/jwt");
 let AuthMiddleware = class AuthMiddleware {
-    constructor(jwtService) {
+    constructor(jwtService, configService) {
         this.jwtService = jwtService;
+        this.configService = configService;
     }
     use(req, res, next) {
         try {
             const token = req.headers.authorization;
             console.log(token);
             const tokenWithoutBearer = token.split(' ')[1];
-            const decoded = this.jwtService.verify(tokenWithoutBearer, { publicKey: "adkjfbndabsnfknjadhfjvmnöamdhjmngöhkdahjfbmdajhlhön" });
+            const decoded = this.jwtService.verify(tokenWithoutBearer, { publicKey: this.configService.get('JWT_SECRET') });
             if (decoded) {
                 const id = decoded.id;
                 console.log("TOKEN VALID");
@@ -47,6 +49,7 @@ let AuthMiddleware = class AuthMiddleware {
 exports.AuthMiddleware = AuthMiddleware;
 exports.AuthMiddleware = AuthMiddleware = __decorate([
     __param(0, (0, common_1.Inject)(jwt_1.JwtService)),
-    __metadata("design:paramtypes", [jwt_1.JwtService])
+    __metadata("design:paramtypes", [jwt_1.JwtService,
+        config_1.ConfigService])
 ], AuthMiddleware);
 //# sourceMappingURL=auth.middleware.js.map

@@ -6,20 +6,22 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MoviesModule = void 0;
+exports.TmdbModule = void 0;
 const common_1 = require("@nestjs/common");
-const movies_service_1 = require("./movies.service");
-const movies_controller_1 = require("./movies.controller");
-const typeorm_1 = require("@nestjs/typeorm");
+const axios_1 = require("@nestjs/axios");
+const tmdb_service_1 = require("./tmdb.service");
+const tmdb_controller_1 = require("./tmdb.controller");
 const movie_entity_1 = require("./entities/movie.entity");
-let MoviesModule = class MoviesModule {
+const typeorm_1 = require("@nestjs/typeorm");
+let TmdbModule = class TmdbModule {
 };
-exports.MoviesModule = MoviesModule;
-exports.MoviesModule = MoviesModule = __decorate([
+exports.TmdbModule = TmdbModule;
+exports.TmdbModule = TmdbModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([movie_entity_1.Movie])],
-        controllers: [movies_controller_1.MoviesController],
-        providers: [movies_service_1.MoviesService],
+        imports: [axios_1.HttpModule, typeorm_1.TypeOrmModule.forFeature([movie_entity_1.Movie])],
+        providers: [tmdb_service_1.TmdbService],
+        controllers: [tmdb_controller_1.TmdbController],
+        exports: [tmdb_service_1.TmdbService],
     })
-], MoviesModule);
-//# sourceMappingURL=movies.module.js.map
+], TmdbModule);
+//# sourceMappingURL=tmdb.module.js.map

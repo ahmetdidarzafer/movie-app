@@ -9,32 +9,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Movie = void 0;
-const typeorm_1 = require("typeorm");
-let Movie = class Movie {
-};
-exports.Movie = Movie;
+exports.DeleteUserDto = void 0;
+const swagger_1 = require("@nestjs/swagger");
+class DeleteUserDto {
+}
+exports.DeleteUserDto = DeleteUserDto;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], Movie.prototype, "id", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
+    (0, swagger_1.ApiProperty)({ type: "string" }),
     __metadata("design:type", String)
-], Movie.prototype, "moviename", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], Movie.prototype, "director", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", Number)
-], Movie.prototype, "year", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], Movie.prototype, "imdbrating", void 0);
-exports.Movie = Movie = __decorate([
-    (0, typeorm_1.Entity)('movies')
-], Movie);
-//# sourceMappingURL=movie.entity.js.map
+], DeleteUserDto.prototype, "password", void 0);
+//# sourceMappingURL=delete-user.dto.js.map

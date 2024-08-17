@@ -24,9 +24,9 @@ services:
     image: postgres:13
     container_name: movie_db
     environment:
-      POSTGRES_USER: azafer
-      POSTGRES_PASSWORD: ahmet123
-      POSTGRES_DB: movie_db
+      POSTGRES_USER: DATABASE_USER
+      POSTGRES_PASSWORD: DATABASE_PASSWORD
+      POSTGRES_DB: DATABASE_NAME
     networks:
      - movie_network
     ports:
